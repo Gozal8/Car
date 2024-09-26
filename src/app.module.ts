@@ -1,11 +1,20 @@
 import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { CarsModule } from './cars/cars.module';
-import { databaseConfig } from './cars/config/database.config';  
+import { CarModule } from '../src/model/car.model';
+
 @Module({
   imports: [
-    TypeOrmModule.forRoot(databaseConfig), 
-    CarsModule,
+    TypeOrmModule.forRoot({
+      type: 'postgres',
+      host: 'localhost',
+      port: 5432,
+      username: 'postgres',
+      password: 'your_password',
+      database: 'car_rental',
+      autoLoadEntities: true,
+      synchronize: true,
+    }),
+    CarModule,
   ],
 })
 export class AppModule {}

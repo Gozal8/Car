@@ -5,11 +5,11 @@ dotenv.config();
 
 export const databaseConfig: TypeOrmModuleOptions = {
   type: 'postgres',
-  host: process.env.DB_HOST,
-  port: parseInt(process.env.DB_PORT, 10),
-  username: process.env.DB_USER,
-  password: process.env.DB_PASS, 
-  database: process.env.DB_NAME,
+  host: 'localhost',
+  port: 5432,
+  username: 'postgres',
+  password: 'psql', 
+  database: 'n13',
   entities: [__dirname + '/../**/*.entity{.ts,.js}'],
   synchronize: true,
 };

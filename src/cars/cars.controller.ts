@@ -1,43 +1,42 @@
-// src/cars/cars.controller.ts
-import { Body, Controller, Delete, Get, Param, Post, Put, Query } from '@nestjs/common';
-import { CarsService } from './cars.service';
-import { CreateCarDto } from './dto/create-car.dto';
-import { UpdateCarDto } from './dto/update-car.dto';
+import { Controller, Get, Post, Param, Body, Delete, Patch, UseInterceptors } from '@nestjs/common';
+import { CarService } from './cars.service';
+import { Car } from './Model/car.entity';
+import { LoggingInterceptor } from 'src/loggin.interceptor';
 
-@Controller('cars')
-export class CarsController {
-  constructor(private readonly carsService: CarsService) {}
 
-  // GET barcha mashinalar
+
+
+@UseInterceptors(LoggingInterceptor)
+export class CarController {
+  
+  constructor(private readonly carService: CarService) {}
+
   @Get()
-  findAll(@Query('year') year?: number, @Query('price') price?: number) {
-    return this.carsService.findAll({ year, price });
+  findAll(): Promise<Car[]> {
+    return this.carService.findAll();
   }
 
-  // GET bir mashinani olish
   @Get(':id')
-  findOne(@Param('id') id: number) {
-    return this.carsService.findOne(id);
+  findOne(@Param('id') id: string): Promise<Car> {
+    return this.carService.findOne(+id);
   }
 
-  // POST mashina yaratish
   @Post()
-  create(@Body() createCarDto: CreateCarDto) {
-    return this.carsService.create(createCarDto);
+  create(@Body() car: Car): Promise<Car> {
+    return this.carService.create(car);
   }
 
-  // PUT mashinani yangilash
-  @Put(':id')
-  update(@Param('id') id: number, @Body() updateCarDto: UpdateCarDto) {
-    return this.carsService.update(id, updateCarDto);
+  @Patch(':id')
+  update(@Param('id') id: string, @Body() car: Partial<Car>): Promise<Car> {
+    return this.carService.update(+id, car);
   }
 
-  // DELETE mashinani o'chirish
   @Delete(':id')
-  remove(@Param('id') id: number) {
-    return this.carsService.remove(id);
+  remove(@Param('id') id: string): Promise<void> {
+    return this.carService.remove(+id);
   }
 }
+
 
 
 
